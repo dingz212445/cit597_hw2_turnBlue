@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="jquery.js"></script>
+<script>
+
+</script>
+
+<style>
+button {
+width: 40px;
+height: 40px;
+background-color: blue;
+}
+</style>
+</head>
+
+<body>
+<table>
+<script>
+function start(){
+	for(var i = 0; i < 8; i++){
+		document.write("<tr>");
+		for(var j = 0; j < 8; j++){
+			document.write("<td><button id='" + (i * 10 + j) + "'></button></td>");
+		}
+		document.write("</tr>");
+	}
+}
+start();
+
+</script>
+</table>
+<script type="text/javascript">
+var times = 1;
+var tried = 0;
+function change(id){
+	if($('#' + id).css('background-color') === 'rgb(0, 0, 255)'){
+		$('#' + id).css('background-color', 'rgb(255, 0, 0)');
+	} else {
+		$('#' + id).css('background-color', 'rgb(0, 0, 255)');
+	}
+}
+
+function initialize(){
+	for( var i = 0; i < times; i++){
+		var row = Math.floor(Math.random() * 8);
+		var col = Math.floor(Math.random() * 8);
+		//console.log(row + ',' + col);
+		var thisbutton = document.getElementById(row*10 + col);
+		if(thisbutton.value === 'checked'){
+			console.log("meet red in initialize");
+			i--;
+		} else {
+			//thisbutton.style.background = '#FF0000';
+			console.log("try to click");
+			thisbutton.click();		
+			thisbutton.value = 'checked';
+		}
+	}
+	tried = 0;
+}
+
+function check(){
+	for(var i = 0; i < 8; i++){
+		for(var j = 0; j < 8; j++){
+			if($('#' + (i*10 + j)).css('background-color') === 'rgb(255, 0, 0)'){
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
+function reset(){
+	for(var i = 0; i < 8; i++){
+		for(var j = 0; j < 8; j++){
+			console.log("resetting");
+			$('#' + (i*10 + j)).css('background-color') = 'rgb(0, 0, 255)';
+		}
+	}
+}
+
+	
+$('button').click(function(){
+
+	change(parseInt(this.id));
+	change(parseInt(this.id) + 10);
+	change(parseInt(this.id) - 10);
+	change(parseInt(this.id) + 1);
+	change(parseInt(this.id) - 1);
+	if(check()){
+		tried = 0;
+		if(times < 10){
+			times++;
+			initialize(times);
+		}
+	} else {
+		tried++;
+		console.log('tried: ' + tried);
+		if (tried > times + 5){
+			alert("failed");
+		}
+	}
+
+})
+	
+	initialize(times);
+	
+</script>
+
+<form>
+	<input type="button" name="Reset" value="Reset" onclick="reset()">
+</form>
+</body>
+</html>
